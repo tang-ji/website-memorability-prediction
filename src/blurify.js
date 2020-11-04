@@ -77,7 +77,6 @@
         var _this = this;
         console.log(this.$els);
         this.$els.map(function (el) {
-            console.log('el', el);
             // el.src = el.dataset ? el.dataset.src : el.getAttribute('src');
             el.style['filter'] = el.style['-webkit-filter'] = "blur(" + _this.blur + "px)";
         });

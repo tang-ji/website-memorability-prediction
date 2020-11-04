@@ -2,6 +2,7 @@
 __pycache__/
 imgs/
 temp/
+node_modules/
 webpages/
 *.py[cod]
 *$py.class
