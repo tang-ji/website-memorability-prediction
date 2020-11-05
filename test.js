@@ -2,12 +2,17 @@ const puppeteer = require('puppeteer');
 const http = require('http');
 const url = require('url');
 const crypto = require('crypto');
+const ext = '/Users/jojo/Documents/workspace/Python/website-memorability-prediction/uBlock0.chromium';
+const datadir = '/Users/jojo/Documents/workspace/Python/website-memorability-prediction/caches/';
 
-http.createServer(async function (req, res) {
-  	const buffer = await takeScreenshot(url.parse(req.url,true).query);
-  	res.writeHead(200, {"Content-Type": "text/plain"});
-	res.end("Image saved at: " + buffer);
-}).listen(8080);
+async function run(){
+	http.createServer(async function (req, res) {
+	  	const buffer = await takeScreenshot(url.parse(req.url,true).query);
+	  	res.writeHead(200, {"Content-Type": "text/plain"});
+		res.end("Image saved at: " + buffer);
+	}).listen(8889);
+}
+
 
 function sleep(ms) {
     return new Promise((resolve) => {
@@ -21,7 +26,14 @@ async function takeScreenshot(params) {
 	let width = parseInt(params.width) || 1920;
 	let waiting = parseInt(params.waiting) || 0;
 	let blur = (params.blur == true || params.blur == 1) ? true : false;
-	const browser = await puppeteer.launch({executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"});
+
+	const browser = await puppeteer.launch({
+        executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        headless: false,
+        userDataDir: datadir,
+        ignoreDefaultArgs: ["--disable-extensions"],
+        args: [`--disable-extensions-except=${ext}`, `--load-extension=${ext}`]
+    });	
 	const page = await browser.newPage();
 	await page.goto(String(params.url), {
 		waitUntil: 'networkidle2',
@@ -32,7 +44,10 @@ async function takeScreenshot(params) {
 		height: height
 	});
 
-	await sleep(waiting * 1000);
+	// await sleep(waiting * 1000);
+	const buffer = await page.screenshot({
+		path: 'webpage_dataset/original/' + crypto.createHash('md5').update(params.url).digest('hex') + '.png'
+	});
 	await page.evaluate(async () => {
 		if(blur){
 			for(var svgs=document.getElementsByTagName("svg"),i=0,len=svgs.length;i<len;i++){var node=document.createElement("defs");node.innerHTML='<filter id="f1"><feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur"/></filter>',svgs[i].appendChild(node)}for(i=0,len=(paths=document.getElementsByTagName("path")).length;i<len;i++)paths[i].style.filter=paths[i].style["-webkit-filter"]="url(#f1)";for(i=0,len=(paths=document.getElementsByTagName("rect")).length;i<len;i++)paths[i].style.filter=paths[i].style["-webkit-filter"]="url(#f1)";for(i=0,len=(paths=document.getElementsByTagName("circle")).length;i<len;i++)paths[i].style.filter=paths[i].style["-webkit-filter"]="url(#f1)";var paths;for(i=0,len=(paths=document.getElementsByTagName("line")).length;i<len;i++)paths[i].style.filter=paths[i].style["-webkit-filter"]="url(#f1)";
@@ -41,10 +56,12 @@ async function takeScreenshot(params) {
 	});
 
 	const buffer = await page.screenshot({
-		path: 'webpages/' + crypto.createHash('md5').update(params.url).digest('hex') + '.png'
+		path: 'webpage_dataset/blur/' + crypto.createHash('md5').update(params.url).digest('hex') + '.png'
 	});
 
 	await page.close();
-	await browser.close();
+	// await browser.close();
 	return 'webpages/' + crypto.createHash('md5').update(params.url).digest('hex') + '.png';
 }
+
+run();

@@ -35,7 +35,10 @@ async function takeScreenshot(params) {
   let blur = (params.blur == true || params.blur == 1) ? true : false;
 
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox']
+    args: ['--no-sandbox'],
+    headless: false,
+    userDataDir: datadir,
+    args: [`--disable-extensions-except=${ext}`, `--load-extension=${ext}`]
   });
   const page = await browser.newPage();
   await page.goto(String(params.url), {

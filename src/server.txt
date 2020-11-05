@@ -1,0 +1,8 @@
+curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
+nano nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt install build-essential
+npm install puppeteer
+wget https://dl.google.com/linux/direct/google-chrome-stable_curren
+sudo apt install ./google-chrome-stable_current_amd64.deb
+/usr/bin/google-chrome-stable
