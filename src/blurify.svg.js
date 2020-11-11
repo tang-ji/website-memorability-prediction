@@ -8,11 +8,15 @@ var paths = document.getElementsByTagName("path");
 for(var i = 0, len = paths.length;i<len;i++){
   paths[i].style['filter']=paths[i].style['-webkit-filter']= "url(#f1)";
 }
-var paths = document.getElementsByTagName("rectangle");
+var paths = document.getElementsByTagName("rect");
 for(var i = 0, len = paths.length;i<len;i++){
   paths[i].style['filter']=paths[i].style['-webkit-filter']= "url(#f1)";
 }
 var paths = document.getElementsByTagName("circle");
+for(var i = 0, len = paths.length;i<len;i++){
+  paths[i].style['filter']=paths[i].style['-webkit-filter']= "url(#f1)";
+}
+var paths = document.getElementsByTagName("line");
 for(var i = 0, len = paths.length;i<len;i++){
   paths[i].style['filter']=paths[i].style['-webkit-filter']= "url(#f1)";
 }
