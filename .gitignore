@@ -3,6 +3,8 @@ __pycache__/
 imgs/
 temp/
 caches/
+facebook/
+Socials/
 node_modules/
 webpages/
 webpage_dataset/
