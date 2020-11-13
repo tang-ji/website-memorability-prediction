@@ -6,3 +6,6 @@ npm install puppeteer
 wget https://dl.google.com/linux/direct/google-chrome-stable_curren
 sudo apt install ./google-chrome-stable_current_amd64.deb
 /usr/bin/google-chrome-stable
+
+# redirect 80 to port 5000
+sudoiptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 5000
